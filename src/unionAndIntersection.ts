@@ -24,18 +24,14 @@ type Job = {
   salary: number;
 };
 
-type Destination ={
-    city: string;
-}
 
-type Employee = Person & Job & Destination;
+type Employee = Person & Job;
 
 const emp1: Employee = {
   name: "Alamin",
   age: 22,
   position: "Developer",
   salary: 50000,
-  city: "Chuadanga",
 };
 
 console.log(emp1);
