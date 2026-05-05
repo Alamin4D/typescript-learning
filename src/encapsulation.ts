@@ -26,6 +26,6 @@ class StudentBankAccount extends BankAccount {
 
 const student = new StudentBankAccount(1, "Alamin", 50);
 student.addBalance(5);   // warning
-student.addBalance(20);  // added
+student.addBalance(20);  /// added
 
 console.log(student);
