@@ -84,7 +84,7 @@ class User {
 
 const handleUser = (user: User | Admin) => {
     if (user instanceof Admin) {
-        user.manageSystem();   /// Admin case
+        user.manageSystem();   // Admin case
     } else {
         user.browse();         // User case
     }
