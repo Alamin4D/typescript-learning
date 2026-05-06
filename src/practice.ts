@@ -1,136 +1,182 @@
-// Task 1: Optional Shopping Cart (EASY)
-// type CartItem = {
-//     name: string;
-//     price: number;
-//     quantity?: number;
-// };
+//? Task 1: The "Optional" Shopping Cart
 
-// const calculateTotal = (item: CartItem): number => {
-//     const { price, quantity = 1 } = item;
-//     return price * quantity
-// };
+type CartItem = {
+    name: string;
+    price: number;
+    quantity?: number;
+};
 
-// console.log(calculateTotal({ name: "Pen", price: 10 }));
-// console.log(calculateTotal({ name: "Book", price: 50, quantity: 3 }));
+function calculateTotal(item: CartItem): number {
+    // destructuring + default value
+    const { price, quantity = 1 } = item;
+    return price * quantity;
+}
 
-// type Item = {
-//     name: string;
-//     price: number;
-//     quantity?: number;
-// };
+const item1 = { name: "Book", price: 100 };
+console.log(calculateTotal(item1));
+// Output: 100 (quantity = 1 ধরা হয়েছে)
 
-// const calculatePrice = (item: Item) => {
-//     const { price, quantity = 1 } = item;
-//     return price * quantity
-// }
+const item2 = { name: "Pen", price: 20, quantity: 3 };
+console.log(calculateTotal(item2));
+// Output: 60
 
-// Task 2: Merging User Profiles EASY
 
-// type Person = { name: string; age: number };
-// type JobDetails = { role: string; salary: number };
+//? Task 2: Merging User Profiles
 
-// type Employee = Person & JobDetails;
+type Person = { name: string; age: number };
+type JobDetails = { role: string; salary: number };
 
-// const getProfile = (employee: Employee): string => {
-//     return `Name: ${employee.name}, Roles: ${employee.role}`;
-// };
+// intersection type
+type Employee = Person & JobDetails;
 
-// const employee1: Employee = {
-//     name: "Alamin",
-//     age: 21,
-//     role: "Developer",
-//     salary: 50000,
-// };
+function getProfile(employee: Employee): string {
+    const { name, role } = employee; // destructuring
+    return `Name: ${employee.name}, Role: ${employee.role}`;
+}
 
-// console.log(getProfile(employee1));
+const emp1: Employee = {
+    name: "Alamin",
+    age: 22,
+    role: "Developer",
+    salary: 50000
+};
 
-// type Student = { name: string; id: number };
-// type Course = { courseName: string; credit: number };
+console.log(getProfile(emp1));
+// Output: Name: Alamin, Role: Developer
 
-// type StudentProfile = Student & Course;
 
-// const getStudentInfo = (student: StudentProfile): string => {
-//     return `Name: ${student.name}, Course: ${student.courseName}`;
-// };
-
-// const student1: StudentProfile = {
-//     name: "Alamin",
-//     id: 101,
-//     courseName: "TypeScript",
-//     credit: 3
-// };
-
-// console.log(getStudentInfo(student1));
+//? Task 3: The "Safe" Data Fetcher
 
 type UserResponse = {
     info?: {
         address?: {
-            zipcode?: string;
-        };
-    };
-};
-
-const user3 = {
-    info: {
-        address: {}
+            zipCode?: string;
+        }
     }
 };
 
-const getZipCode = (user: UserResponse) => {
-    return user?.info?.address?.zipcode ?? "00000";
+function getZipCode(user: UserResponse): string {
+    return user.info?.address?.zipCode ?? "00000";
 }
 
-// console.log(getZipCode(user3));
+console.log(getZipCode({}));
+// Output: "00000"
+
+console.log(getZipCode({ info: {} }));
+// Output: "00000"
+
+console.log(getZipCode({ info: { address: {} } }));
+// Output: "00000"
+
+console.log(getZipCode({ info: { address: { zipCode: "12345" } } }));
+// Output: "12345"
 
 
-// let secretValue: unknown = "typescript is awesome";
+//? Task 4: Type Assertion
 
-// let upperValue = (secretValue as string).toLowerCase();
+let secretValue: unknown = "typescript is awesome";
 
-// console.log(upperValue);
+// type assertion
+let upperValue = (secretValue as string).toUpperCase();
 
-// let value: unknown = 123.456;
-
-// let fixedValue = (value as number).toFixed(2);
-// console.log(fixedValue);
-
-// let data: unknown = "Hello TypeScript";
-// let dataLength = (data as string).length;
-// console.log(dataLength);
-
-// let numbers: unknown = [10, 20, 30, 40];
-
-// let sumNumber = (numbers as number[]);
-// const totalNumber = sumNumber.reduce((sum, total) => {
-//     return sum + total;
-// }, 0)
-
-// console.log(totalNumber);
-
-// let input: unknown = "500";
-
-// let assertString = (input as string)
-// let result = Number(assertString) + 100;
-// console.log(result);
+console.log(upperValue);
+// Output: TYPESCRIPT IS AWESOME
 
 
-// const logLength = <T extends { length: number }>(input: T): number => {
-//     return input.length;
-// };
+//? Task 5: Generic Constraints
 
-// const result1 = logLength("Hello");       // 5
-// const result2 = logLength([1, 2, 3, 4]);  // 4
+function logLength<T extends { length: number }>(input: T): number {
+    return input.length;
+}
 
-// console.log(result1);
-// console.log(result2);
+console.log(logLength("Hello"));
+// Output: 5
 
-// const getFirstElement = <T>(input: T[]): T | undefined => {
-//     return input[input.length -1];
-// };
+console.log(logLength([1, 2, 3, 4]));
+// Output: 4
 
-// const result1 = getFirstElement([10, 20, 30, 40, 50]); 
-// console.log(result1); // 10
+console.log(logLength({ length: 10 }));
+// Output: 10
 
-// const result2 = getFirstElement(["a", "b", "c", "d", "e"]);
-// console.log(result2); // "a"
 
+//? Task 6: The Property Guard
+
+const product = { id: 101, name: "Keyboard", price: 50, quantity: 3 };
+
+function getProductProp<T, K extends keyof T>(obj: T, key: K): T[K] {
+    return obj[key];
+}
+
+
+// valid ব্যবহার ✅
+console.log(getProductProp(product, "name"));
+// Output: "Keyboard"
+
+console.log(getProductProp(product, "price"));
+// Output: 50
+
+console.log(getProductProp(product, "quantity"));
+// Output: 3
+
+
+//? Task 7: Constant Literal Types
+
+const Colors = {
+    Primary: "RED",
+    Secondary: "BLUE"
+} as const;
+
+// values থেকে type বানানো
+type ValidColor = typeof Colors[keyof typeof Colors];
+
+function setColor(c: ValidColor): void {
+    console.log(`Color set to ${c}`);
+}
+
+setColor("RED");   // ✅ OK
+setColor("BLUE");  // ✅ OK
+
+
+//? Task 8: The "Draft" Mode
+
+interface MyDocument {
+  title: string;
+  content: string;
+  author: string;
+}
+
+// mapped type
+type Draft<T> = {
+  readonly [P in keyof T]?: T[P];
+};
+
+// usage
+const myDraft: Draft<MyDocument> = {
+  title: "Draft Title"
+};
+
+const draft2: Draft<MyDocument> = {};
+// ✅ সব optional, তাই empty object ও valid
+
+
+//? Task 9: The Wrapper
+
+// conditional type
+type DataType<T> = T extends any[] ? "Large" : "Small";
+
+type A = DataType<string[]>;  // "Large"
+type B = DataType<number[]>;  // "Large"
+
+type C = DataType<string>;    // "Small"
+type D = DataType<number>;    // "Small"
+
+
+//? Task 10: Utility Type (Omit)
+
+interface UserAccount {
+id: number;
+username: string;
+password: string;
+}
+
+type PublicUser = Omit<UserAccount, "password">;
