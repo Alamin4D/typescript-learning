@@ -12,6 +12,7 @@ class Person {
   }
 }
 
+
 // Student inherits from Person
 class Student extends Person {
   course: string;
